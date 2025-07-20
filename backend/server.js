@@ -14,6 +14,7 @@ const app = express();
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "*",
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -34,14 +35,37 @@ app.use("/api/resume", resumeRoutes);
 
 // Serve uploads folder
 
+// app.use(
+//   "/uploads",
+//   express.static(path.join(__dirname, "uploads"), {
+//     setHeaders: (res, path) => {
+//       res.set(
+//         "Access-Control-Allow-Origin",
+//         "https://resumebuilder-frontend-1rm4.onrender.com"
+//       );
+//     },
+//   })
+// );
+
+const allowedOrigins = [
+  "https://resumebuilder-frontend-1rm4.onrender.com",
+  "http://localhost:5173",
+];
+
 app.use(
   "/uploads",
   express.static(path.join(__dirname, "uploads"), {
     setHeaders: (res, path) => {
-      res.set(
-        "Access-Control-Allow-Origin",
-        "https://resumebuilder-frontend-1rm4.onrender.com"
-      );
+      const origin = res.req.headers.origin;
+      if (allowedOrigins.includes(origin)) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+        res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+        res.setHeader(
+          "Access-Control-Allow-Headers",
+          "Content-Type, Authorization"
+        );
+        res.setHeader("Access-Control-Allow-Credentials", "true");
+      }
     },
   })
 );
