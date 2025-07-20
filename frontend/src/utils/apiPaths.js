@@ -1,5 +1,5 @@
 // utils/apiPaths.js
-export const BASE_URL = "http://localhost:8000";
+export const BASE_URL = "https://resumebuilder-backend-17cn.onrender.com";
 
 export const API_PATHS = {
   AUTH: {
