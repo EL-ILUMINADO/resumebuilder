@@ -14,7 +14,7 @@ export const API_PATHS = {
     GET_BY_ID: (id) => `/api/resume/${id}`, // GET - Get a specific resume
     UPDATE: (id) => `/api/resume/${id}`, // PUT - Update a resume
     DELETE: (id) => `/api/resume/${id}`, // DELETE - Delete a resume
-    UPLOAD_IMAGES: (id) => `/api/resume/${id}/upload-image`, // PUT - Upload Thumbnail and Resume profile image
+    UPLOAD_IMAGES: (id) => `/api/resume/${id}/upload-images`, // ✅
   },
 
   IMAGE: {

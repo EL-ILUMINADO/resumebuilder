@@ -13,9 +13,7 @@ const app = express();
 
 app.use(
   cors({
-    origin:
-      process.env.CLIENT_URL ||
-      "https://resumebuilder-frontend-1rm4.onrender.com",
+    origin: "https://resumebuilder-frontend-1rm4.onrender.com",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],

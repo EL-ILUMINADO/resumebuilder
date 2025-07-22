@@ -1,5 +1,5 @@
-import React, {useEffect, useRef, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   LuArrowLeft,
   LuCircleAlert,
@@ -11,9 +11,9 @@ import {
 import toast from "react-hot-toast";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import TitleInput from "../../components/Inputs/TitleInput";
-import {useReactToPrint} from "react-to-print";
+import { useReactToPrint } from "react-to-print";
 import axiosInstance from "../../utils/axiosInstance";
-import {API_PATHS} from "../../utils/apiPaths";
+import { API_PATHS } from "../../utils/apiPaths";
 import StepProgress from "../../components/StepProgress";
 import ProfileInfoForm from "./Forms/ProfileInfoForm";
 import ContactInfoForm from "./Forms/ContactInfoForm";
@@ -33,7 +33,7 @@ import ThemeSelector from "./ThemeSelector";
 import Modal from "../../components/Modal";
 
 const EditResume = () => {
-  const {resumeId} = useParams();
+  const { resumeId } = useParams();
   const navigate = useNavigate();
 
   const resumeRef = useRef(null);
@@ -126,14 +126,14 @@ const EditResume = () => {
 
     switch (currentPage) {
       case "profile-info":
-        const {fullName, designation, summary} = resumeData.profileInfo;
+        const { fullName, designation, summary } = resumeData.profileInfo;
         if (!fullName.trim()) errors.push("Full Name is required.");
         if (!designation.trim()) errors.push("Designation is required");
         if (!summary.trim()) errors.push("Summary is required");
         break;
 
       case "contact-info":
-        const {email, phone} = resumeData.contactInfo;
+        const { email, phone } = resumeData.contactInfo;
         if (!email.trim() || !/^\S+@\S+\.\S+$/.test(email))
           errors.push("Email is required");
         if (!phone.trim()) errors.push("Phone is required");
@@ -141,7 +141,7 @@ const EditResume = () => {
 
       case "work-experience":
         resumeData.workExperience.forEach(
-          ({company, role, startDate, endDate}, index) => {
+          ({ company, role, startDate, endDate }, index) => {
             if (!company.trim())
               errors.push(`Company at index ${index + 1} is required`);
             if (!role.trim())
@@ -156,7 +156,7 @@ const EditResume = () => {
 
       case "education-info":
         resumeData.education.forEach(
-          ({degree, institution, startDate, endDate}, index) => {
+          ({ degree, institution, startDate, endDate }, index) => {
             if (!degree.trim())
               errors.push(`Degree at index ${index + 1} is required`);
             if (!institution.trim())
@@ -170,7 +170,7 @@ const EditResume = () => {
         break;
 
       case "skills":
-        resumeData.skills.forEach(({name, progress}, index) => {
+        resumeData.skills.forEach(({ name, progress }, index) => {
           if (!name.trim())
             errors.push(`Skill name at index ${index + 1} is required`);
           if (progress < 1 || progress > 100)
@@ -179,7 +179,7 @@ const EditResume = () => {
         break;
 
       case "projects":
-        resumeData.projects.forEach(({title, description}, index) => {
+        resumeData.projects.forEach(({ title, description }, index) => {
           if (!title.trim())
             errors.push(`Project title at index ${index + 1} is required`);
           if (!description.trim())
@@ -190,7 +190,7 @@ const EditResume = () => {
         break;
 
       case "certifications":
-        resumeData.certifications.forEach(({title, issuer}, index) => {
+        resumeData.certifications.forEach(({ title, issuer }, index) => {
           if (!title.trim())
             errors.push(
               `Certification title at index ${index + 1} is required`
@@ -259,7 +259,7 @@ const EditResume = () => {
 
       const percent = Math.round((nextIndex / (pages.length - 1)) * 100);
       setProgress(percent);
-      window.scrollTo({top: 0, behavior: "smooth"});
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -287,7 +287,7 @@ const EditResume = () => {
       //Update progress
       const percent = Math.round((prevIndex / (pages.length - 1)) * 100);
       setProgress(percent);
-      window.scrollTo({top: 0, behavior: "smooth"});
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -526,7 +526,7 @@ const EditResume = () => {
       if (profileImageFile) formData.append("profileImage", profileImageFile);
       if (thumbnailFile) formData.append("thumbnail", thumbnailFile);
 
-      const uploadResponse = await axiosInstance.put(
+      const uploadResponse = await axiosInstance.post(
         API_PATHS.RESUME.UPLOAD_IMAGES(resumeId),
         formData,
         {
@@ -536,7 +536,7 @@ const EditResume = () => {
         }
       );
 
-      const {thumbnailLink, profilePreviewUrl} = uploadResponse.data;
+      const { thumbnailLink, profilePreviewUrl } = uploadResponse.data;
 
       console.log("RESUME_DATA__", resumeData);
 
@@ -581,21 +581,23 @@ const EditResume = () => {
 
   const handleDeleteResume = async () => {
     try {
-      setIsLoading(true)
-      const response = await axiosInstance.delete(API_PATHS.RESUME.DELETE(resumeId))
-      toast.success("Resume Deleted Successfully.")
-      navigate("/dashboard")
+      setIsLoading(true);
+      const response = await axiosInstance.delete(
+        API_PATHS.RESUME.DELETE(resumeId)
+      );
+      toast.success("Resume Deleted Successfully.");
+      navigate("/dashboard");
     } catch (err) {
-      console.error("Error deleting resume", err)
-      toast.error("Resume could not be deleted. Try again")
+      console.error("Error deleting resume", err);
+      toast.error("Resume could not be deleted. Try again");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
   // Download resume in PDF
 
-  const reactToPrintFn = useReactToPrint({contentRef: resumeDownloadRef});
+  const reactToPrintFn = useReactToPrint({ contentRef: resumeDownloadRef });
 
   // Function to update baseWidth based on resume's container size
 
@@ -621,8 +623,7 @@ const EditResume = () => {
   return (
     <DashboardLayout>
       <div className="container mx-auto">
-        <div
-          className="flex items-center justify-between gap-5 bg-white rounded-lg border border-purple-100 py-3 px-4 mb-4">
+        <div className="flex items-center justify-between gap-5 bg-white rounded-lg border border-purple-100 py-3 px-4 mb-4">
           <TitleInput
             title={resumeData.title}
             setTitle={(value) => {
@@ -640,12 +641,12 @@ const EditResume = () => {
               className="btn-small-light"
               onClick={() => setOpenThemeSelector(true)}
             >
-              <LuPalette className="text-[16px]"/>
+              <LuPalette className="text-[16px]" />
               <span className="hidden md:block">Change Theme</span>
             </button>
 
             <button className="btn-small-light" onClick={handleDeleteResume}>
-              <LuTrash2 className="text-[16px]"/>
+              <LuTrash2 className="text-[16px]" />
               <span className="hidden md:block">Delete</span>
             </button>
 
@@ -653,7 +654,7 @@ const EditResume = () => {
               className="btn-small-light"
               onClick={() => setOpenPreviewModal(true)}
             >
-              <LuDownload className="text-[16px]"/>
+              <LuDownload className="text-[16px]" />
               <span className="hidden md:block">Preview & Download</span>
             </button>
           </div>
@@ -661,15 +662,14 @@ const EditResume = () => {
         {/* break space */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="bg-white rounded-lg border border-purple-100 overflow-hidden">
-            <StepProgress progress={0}/>
+            <StepProgress progress={0} />
 
             {renderForm()}
 
             <div className="mx-5">
               {errorMsg && (
-                <div
-                  className="flex items-center gap-2 text-[11px] font-medium text-amber-600 bg-amber-100 px-2 py-0.5 my-1 rounded">
-                  <LuCircleAlert className="text-md"/> {errorMsg}
+                <div className="flex items-center gap-2 text-[11px] font-medium text-amber-600 bg-amber-100 px-2 py-0.5 my-1 rounded">
+                  <LuCircleAlert className="text-md" /> {errorMsg}
                 </div>
               )}
 
@@ -679,7 +679,7 @@ const EditResume = () => {
                   onClick={goBack}
                   disabled={isLoading}
                 >
-                  <LuArrowLeft className="text-[16px]"/>
+                  <LuArrowLeft className="text-[16px]" />
                   Back
                 </button>
 
@@ -688,7 +688,7 @@ const EditResume = () => {
                   onClick={uploadResumeImages}
                   disabled={isLoading}
                 >
-                  <LuSave className="text-[16px]"/>
+                  <LuSave className="text-[16px]" />
                   {isLoading ? "Updating...." : "Save & Exit"}
                 </button>
 
@@ -698,7 +698,7 @@ const EditResume = () => {
                   disabled={isLoading}
                 >
                   {currentPage === "additionalInfo" && (
-                    <LuDownload className="text-[16px]"/>
+                    <LuDownload className="text-[16px]" />
                   )}
 
                   {currentPage === "additionalInfo"
@@ -706,7 +706,7 @@ const EditResume = () => {
                     : "Next"}
 
                   {currentPage !== "additionalInfo" && (
-                    <LuArrowLeft className="text-[16px] rotate-180"/>
+                    <LuArrowLeft className="text-[16px] rotate-180" />
                   )}
                 </button>
               </div>
@@ -745,10 +745,15 @@ const EditResume = () => {
         </div>
       </Modal>
 
-      <Modal isOpen={openPreviewModal} onClose={() => setOpenPreviewModal(false)}
-             title={resumeData.title} showActionBtn actionBtnText={"Download"}
-             actionBtnIcon={<LuDownload className={"text-[16px]"}/>}
-             onActionClick={() => reactToPrintFn()}>
+      <Modal
+        isOpen={openPreviewModal}
+        onClose={() => setOpenPreviewModal(false)}
+        title={resumeData.title}
+        showActionBtn
+        actionBtnText={"Download"}
+        actionBtnIcon={<LuDownload className={"text-[16px]"} />}
+        onActionClick={() => reactToPrintFn()}
+      >
         <div ref={resumeDownloadRef} className={"w-[98vw] h-[90vh]"}>
           <RenderResume
             templateId={resumeData?.template?.theme || ""}
