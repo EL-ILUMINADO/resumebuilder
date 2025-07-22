@@ -29,7 +29,7 @@ router.put("/:id", protect, updateResume);
 
 // upload resume images
 
-router.put("/:id/upload-image", protect, uploadResumeImages);
+router.post("/:id/upload-images", protect, uploadResumeImages);
 
 // delete resume
 
