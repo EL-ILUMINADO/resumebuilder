@@ -13,7 +13,9 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "*",
+    origin:
+      process.env.CLIENT_URL ||
+      "https://resumebuilder-frontend-1rm4.onrender.com",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -52,22 +54,15 @@ const allowedOrigins = [
   "http://localhost:5173",
 ];
 
+const uploadsPath = path.join(__dirname, "/uploads");
+
 app.use(
   "/uploads",
-  express.static(path.join(__dirname, "uploads"), {
-    setHeaders: (res, path) => {
-      const origin = res.req.headers.origin;
-      if (allowedOrigins.includes(origin)) {
-        res.setHeader("Access-Control-Allow-Origin", origin);
-        res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-        res.setHeader(
-          "Access-Control-Allow-Headers",
-          "Content-Type, Authorization"
-        );
-        res.setHeader("Access-Control-Allow-Credentials", "true");
-      }
-    },
-  })
+  cors({
+    origin: "https://resumebuilder-frontend-1rm4.onrender.com", // Frontend origin
+    credentials: true,
+  }),
+  express.static(uploadsPath)
 );
 
 // start server
